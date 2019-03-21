@@ -381,7 +381,7 @@ local function enemyFramesCoreOnUpdate()
 		if not _G['enemyFramesSettings']:IsShown() then		
 			if not insideBG then
 				if getn(playerList) == 0 then				
-					_G['enemyFrameDisplay']:Hide()
+--					_G['enemyFrameDisplay']:Hide()
 				else
 					_G['enemyFrameDisplay']:Show()
 				end

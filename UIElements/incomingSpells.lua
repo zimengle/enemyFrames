@@ -1,3 +1,24 @@
+	local function Print(msg)
+		if not DEFAULT_CHAT_FRAME then
+			return
+		end
+		DEFAULT_CHAT_FRAME:AddMessage("监听对象debug" .. ": "..(msg or ""))
+	end
+
+	local function IsTrinketEquipped(name)
+		for slot = 13, 14 do
+			local item = GetInventoryItemLink("player", slot)
+			if item then
+				local _, _, itemCode = strfind(item, "(%d+):")
+				local itemName = GetItemInfo(itemCode)
+				if itemName == name and GetInventoryItemCooldown("player", slot) == 0 then
+					return slot
+				end
+			end
+		end
+		return nil
+	end
+	Print(IsTrinketEquipped("超低温寒冰偏斜器"))
 	-------------------------------------------------------------------------------
 	local playerName = UnitName'player'
 	local enabled, refresh = false, true
@@ -98,8 +119,9 @@
 	INCOMINGSPELLSsettings = function(b)
 		defaultValues(b)
 	end
+
 	INCOMINGSPELLSinit = function(b)
-		enabled = b
+		enabled = true
 		if enabled then
 			incFrame:SetScript('OnUpdate', function()
 				nextRefresh = nextRefresh - arg1
@@ -129,25 +151,54 @@
 		return false
 	end
 	local newCasterEntry = function(c, s)
+--		Print("newCasterEntry")
+		Print("c:"..c)
 		local currentTarget 	 = UnitExists'target' and UnitName'target' or nil
 
-		if not ENEMYFRAMECOREgetPlayer(c) then return end
-		
-		if currentTarget and currentTarget ~= c then
+--		Print("c:"..c..",target:"..currentTarget)
+--		Print("newCasterEntry1")
+--		if not ENEMYFRAMECOREgetPlayer(c) then return end
+--		Print("newCasterEntry2")
+--		if currentTarget and currentTarget ~= c then
 			local b = checkCasterTarget(c)
-			
-			if currentTarget == nil then	ClearTarget()	
-			else	
-				TargetByName(currentTarget, true)
+			Print("newCasterEntry3")
+			if currentTarget == nil then	ClearTarget()
+			else
+				TargetLastTarget()
 			end
 			
 			if b then
 				removeDoubleEntry(c)
-				local p = {['name'] = c, ['spell'] = s}
+				local p = {['name'] = c, ['spell'] = s }
+				Print("test:"..s);
+				if s == "暗影箭" then
+					Print(s)
+					if(IsTrinketEquipped("快速暗影反射器")) then
+						local slot = IsTrinketEquipped("快速暗影反射器")
+						Print("快速暗影反射器")
+						UseInventoryItem(slot)
+					end
+				elseif s == "寒冰箭" then
+					Print(s)
+					if(IsTrinketEquipped("超低温寒冰偏斜器")) then
+						local slot = IsTrinketEquipped("超低温寒冰偏斜器")
+						Print("超低温寒冰偏斜器")
+						UseInventoryItem(slot)
+					end
+				elseif s == "火球术" or s == "灼烧" or s == "炎爆术" or s == "灵魂之火" then
+					Print(s)
+					if(IsTrinketEquipped("高辐射烈焰反射器")) then
+						local slot = IsTrinketEquipped("高辐射烈焰反射器")
+						Print("高辐射烈焰反射器")
+						UseInventoryItem(slot)
+					end
+				end
+
+
 				table.insert(playerCastList, p)
 				refresh = true
 			end
-		end
+--		end
 	end
 	-------------------------------------------------------------------------------
 	local parseCombatLog = function()
@@ -181,5 +232,6 @@
 	incFrame:RegisterEvent'ZONE_CHANGED_NEW_AREA'
 	incFrame:RegisterEvent'CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE'
 	incFrame:SetScript('OnEvent', eventHandler)
-	
+	Print(123)
+	defaultValues(true)
 	-------------------------------------------------------------------------------

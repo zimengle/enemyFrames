@@ -181,10 +181,10 @@ end
 local closeSettings = function()
 	--settings:Hide()
 	if not enemyFramesDisplayShow and not insideBG then
-		_G['enemyFrameDisplay']:Hide()
+--		_G['enemyFrameDisplay']:Hide()
 	end
 
-	INCOMINGSPELLSsettings(false) TARGETFRAMECASTBARsettings(false)
+--	INCOMINGSPELLSsettings(false) TARGETFRAMECASTBARsettings(false)
 end
 -- x button
 settings.x:SetScript('OnClick', function() 
