@@ -198,11 +198,7 @@ local function eventHandler()
 		local tc = playerFaction == 'Alliance' and 'FF1A1A' or '00ADF0'
 		print('|cff' ..tc.. format(L['[enemyFrames] v%s loaded. |cffffffff/efs|cff%s for menu settings.'], ENEMYFRAMESVERSION, tc))
 		_G['enemyFrameDisplay']:SetScale(ENEMYFRAMESPLAYERDATA['scale'])
-		_G['enemyFrameDisplay']:SetPoint('CENTER', UIParent, ENEMYFRAMESPLAYERDATA['offX'], ENEMYFRAMESPLAYERDATA['offY'])
-	elseif event == 'PLAYER_LOGOUT' then
-		local point, relativeTo, relativePoint, xOfs, yOfs = _G['enemyFrameDisplay']:GetPoint()
-		ENEMYFRAMESPLAYERDATA['offX'] = xOfs
-		ENEMYFRAMESPLAYERDATA['offY'] = yOfs
+		_G['enemyFrameDisplay']:SetPoint('CENTER', UIParent, ENEMYFRAMESPLAYERDATA['offX'], ENEMYFRAMESPLAYERDATA['offY'] < 0 and 100)
 	elseif event == 'ZONE_CHANGED_NEW_AREA' then
 		insideBG = IsInsideBG()
 	end

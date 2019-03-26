@@ -18,7 +18,6 @@
 		end
 		return nil
 	end
-	Print(IsTrinketEquipped("超低温寒冰偏斜器"))
 	-------------------------------------------------------------------------------
 	local playerName = UnitName'player'
 	local enabled, refresh = false, true
@@ -151,42 +150,35 @@
 		return false
 	end
 	local newCasterEntry = function(c, s)
---		Print("newCasterEntry")
-		Print("c:"..c)
 		local currentTarget 	 = UnitExists'target' and UnitName'target' or nil
 
---		Print("c:"..c..",target:"..currentTarget)
---		Print("newCasterEntry1")
---		if not ENEMYFRAMECOREgetPlayer(c) then return end
---		Print("newCasterEntry2")
---		if currentTarget and currentTarget ~= c then
+		if not ENEMYFRAMECOREgetPlayer(c) then return end
+
+		if currentTarget and currentTarget ~= c then
 			local b = checkCasterTarget(c)
-			Print("newCasterEntry3")
+
 			if currentTarget == nil then	ClearTarget()
 			else
-				TargetLastTarget()
+				TargetByName(currentTarget, true)
 			end
 			
 			if b then
 				removeDoubleEntry(c)
 				local p = {['name'] = c, ['spell'] = s }
-				Print("test:"..s);
+				Print("施法:"..s);
 				if s == "暗影箭" then
-					Print(s)
 					if(IsTrinketEquipped("快速暗影反射器")) then
 						local slot = IsTrinketEquipped("快速暗影反射器")
 						Print("快速暗影反射器")
 						UseInventoryItem(slot)
 					end
 				elseif s == "寒冰箭" then
-					Print(s)
 					if(IsTrinketEquipped("超低温寒冰偏斜器")) then
 						local slot = IsTrinketEquipped("超低温寒冰偏斜器")
 						Print("超低温寒冰偏斜器")
 						UseInventoryItem(slot)
 					end
-				elseif s == "火球术" or s == "灼烧" or s == "炎爆术" or s == "灵魂之火" then
-					Print(s)
+				elseif s == "火球术" or s == "灼烧" or s == "炎爆术" or s == "灵魂之火" or s == "献祭" then
 					if(IsTrinketEquipped("高辐射烈焰反射器")) then
 						local slot = IsTrinketEquipped("高辐射烈焰反射器")
 						Print("高辐射烈焰反射器")
@@ -198,7 +190,7 @@
 				table.insert(playerCastList, p)
 				refresh = true
 			end
---		end
+		end
 	end
 	-------------------------------------------------------------------------------
 	local parseCombatLog = function()
@@ -232,6 +224,5 @@
 	incFrame:RegisterEvent'ZONE_CHANGED_NEW_AREA'
 	incFrame:RegisterEvent'CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE'
 	incFrame:SetScript('OnEvent', eventHandler)
-	Print(123)
 	defaultValues(true)
 	-------------------------------------------------------------------------------
